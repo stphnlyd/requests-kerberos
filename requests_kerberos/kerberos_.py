@@ -206,7 +206,13 @@ class HTTPKerberosAuth(AuthBase):
             # allows use of an arbitrary hostname for the kerberos exchange
             # (eg, in cases of aliased hosts, internal vs external, CNAMEs
             # w/ name-based HTTP hosting)
-            kerb_host = self.hostname_override if self.hostname_override is not None else host
+            if self.hostname_override is not None:
+                if hasattr(self.hostname_override, '__call__'):
+                    kerb_host = self.hostname_override(host)
+                else:
+                    kerb_host = self.hostname_override
+            else:
+                kerb_host = host
             kerb_spn = "{0}@{1}".format(self.service, kerb_host)
 
             result, self.context[host] = kerberos.authGSSClientInit(kerb_spn,

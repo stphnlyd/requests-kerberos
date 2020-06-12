@@ -133,6 +133,13 @@ setting the ``hostname_override`` arg:
     >>> r = requests.get("https://externalhost.example.org/", auth=kerberos_auth)
     ...
 
+The ``hostname_override`` arg can also be a callable which takes an
+unoverridden hostname and return a hostname. This mechanism can possibly
+be used to workaround Windows SSPI's requirement for FQDN, and make it
+more transparent like a browser. But be aware that implementing such kind
+of FQDN resolver can have some security implications and care shall be
+taken.
+
 Explicit Principal
 ------------------
 
